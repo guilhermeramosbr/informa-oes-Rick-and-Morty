@@ -13,13 +13,14 @@ export const Container = styled.div`
 
   #containerUsers {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 20px;
     margin: 40px 0px;
     
   }
   img{
     cursor: pointer;
+    border-radius: solid 5px
   }
 
   h2{

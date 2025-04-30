@@ -23,7 +23,7 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    // Filtra os personagens sempre que a lista completa de personagens ou o termo de pesquisa mudam
+   
     const results = characters.filter((character) =>
       character.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -35,8 +35,7 @@ function Home() {
   };
 
   const handleSearchButtonClick = () => {
-    // A lógica de filtragem já está no segundo useEffect, então não precisamos fazer nada extra aqui,
-    // a lista 'filteredCharacters' já estará atualizada.
+   
     console.log("Pesquisando por:", searchTerm);
   };
 
