@@ -16,6 +16,10 @@ export const Container = styled.div`
     grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: 20px;
     margin: 40px 0px;
+    
+  }
+  img{
+    cursor: pointer;
   }
 
   h2{
