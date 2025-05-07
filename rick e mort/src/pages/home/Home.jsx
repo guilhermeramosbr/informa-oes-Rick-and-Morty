@@ -1,4 +1,4 @@
-import { Container, Input, Title, Button } from "./style";
+import { Container, Input, Title, Button, SearchContainer } from "./style";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
@@ -10,20 +10,33 @@ function Home() {
 
   useEffect(() => {
     async function getCharacters() {
-      const response = await fetch('https://rickandmortyapi.com/api/character');
-      const data = await response.json();
-      if (data && data.results && Array.isArray(data.results)) {
-        setCharacters(data.results);
-      } else {
-        console.error("Formato de dados inesperado da API:", data);
-        setCharacters([]);
+      let allCharacters = [];
+      let nextPageUrl = 'https://rickandmortyapi.com/api/character';
+
+      while (nextPageUrl) {
+        try {
+          const response = await fetch(nextPageUrl);
+          const data = await response.json();
+
+          if (data && data.results && Array.isArray(data.results)) {
+            allCharacters = [...allCharacters, ...data.results];
+            nextPageUrl = data.info.next;
+          } else {
+            console.error("Formato de dados inesperado da API:", data);
+            nextPageUrl = null; 
+          }
+        } catch (error) {
+          console.error("Erro ao buscar personagens:", error);
+          nextPageUrl = null;
+        }
       }
+
+      setCharacters(allCharacters);
     }
     getCharacters();
   }, []);
 
   useEffect(() => {
-   
     const results = characters.filter((character) =>
       character.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -35,7 +48,6 @@ function Home() {
   };
 
   const handleSearchButtonClick = () => {
-   
     console.log("Pesquisando por:", searchTerm);
   };
 
@@ -43,13 +55,15 @@ function Home() {
     <Container>
       <Title>Lista de Personagens</Title>
       <div>
-        <Input
-          type='text'
-          placeholder='digite o nome do personagem'
-          value={searchTerm}
-          onChange={handleSearchInputChange}
-        />
-        <Button onClick={handleSearchButtonClick}>Pesquisar</Button>
+        <SearchContainer>
+          <Input
+            type='text'
+            placeholder='digite o nome do personagem'
+            value={searchTerm}
+            onChange={handleSearchInputChange}
+          />
+          <Button onClick={handleSearchButtonClick}>Pesquisar</Button>
+        </SearchContainer>
       </div>
       <div id="containerUsers">
         {Array.isArray(filteredCharacters) && filteredCharacters.length > 0 ? (
